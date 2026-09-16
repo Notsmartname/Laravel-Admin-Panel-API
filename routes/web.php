@@ -23,114 +23,45 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::middleware(['admin'])
-        ->prefix('admin/users')
-        ->name('admin.users.')
-        ->controller(RegisteredUserController::class)
-        ->group(function () {
-            Route::get('/', 'index')
-                ->name('index');
+    Route::group(['prefix' => 'admin/users', 'controller' => RegisteredUserController::class, 'middleware' => ['admin']], function () {
+        Route::get('/', 'index')->name('admin.users.index');
+        Route::get('/create', 'create')->name('admin.users.create');
+        Route::post('/', 'store')->name('admin.users.store');
+        Route::get('/{user}/edit', 'edit')->name('admin.users.edit');
+        Route::put('/{user}', 'update')->name('admin.users.update');
+        Route::delete('/{user}', 'destroy')->name('admin.users.destroy');
+    });
 
-            Route::get('/create', 'create')
-                ->name('create');
+    Route::group(['prefix' => 'admin/pages', 'controller' => PageController::class], function () {
+        Route::get('/', 'index')->name('admin.pages.index');
+        Route::get('/create', 'create')->name('admin.pages.create');
+        Route::post('/', 'store')->name('admin.pages.store');
+        Route::get('/{id}', 'show')->name('admin.pages.show');
+        Route::get('/{id}/edit', 'edit')->name('admin.pages.edit');
+        Route::put('/{id}', 'update')->name('admin.pages.update');
+        Route::delete('/{id}', 'destroy')->name('admin.pages.destroy');
+    });
 
-            Route::post('/', 'store')
-                ->name('store');
+    Route::group(['prefix' => 'admin/categories', 'controller' => CategoryController::class], function () {
+        Route::get('/', 'index')->name('admin.categories.index');
+        Route::get('/create', 'create')->name('admin.categories.create');
+        Route::post('/', 'store')->name('admin.categories.store');
+        Route::get('/{id}', 'show')->name('admin.categories.show');
+        Route::get('/{id}/edit', 'edit')->name('admin.categories.edit');
+        Route::put('/{id}', 'update')->name('admin.categories.update');
+        Route::delete('/{id}', 'destroy')->name('admin.categories.destroy');
+    });
 
-            Route::get('/{user}/edit', 'edit')
-                ->name('edit');
-
-            Route::put('/{user}', 'update')
-                ->name('update');
-
-            Route::delete('/{user}', 'destroy')
-                ->name('destroy');
-        });
+    Route::group(['prefix' => 'admin/products', 'controller' => ProductController::class], function () {
+        Route::get('/', 'index')->name('admin.products.index');
+        Route::get('/create', 'create')->name('admin.products.create');
+        Route::post('/', 'store')->name('admin.products.store');
+        Route::get('/{id}', 'show')->name('admin.products.show');
+        Route::get('/{id}/edit', 'edit')->name('admin.products.edit');
+        Route::put('/{id}', 'update')->name('admin.products.update');
+        Route::delete('/{id}', 'destroy')->name('admin.products.destroy');
+    });
 });
-
-
-Route::middleware(['auth'])
-    ->prefix('admin/pages')
-    ->name('admin.pages.')
-    ->controller(PageController::class)
-    ->group(function () {
-        Route::get('/', 'index')
-            ->name('index');
-
-        Route::get('/create', 'create')
-            ->name('create');
-
-        Route::post('/', 'store')
-            ->name('store');
-
-        Route::get('/{id}', 'show')
-            ->name('show');
-
-        Route::get('/{id}/edit', 'edit')
-            ->name('edit');
-
-        Route::put('/{id}', 'update')
-            ->name('update');
-
-        Route::delete('/{id}', 'destroy')
-            ->name('destroy');
-    });
-
-
-Route::middleware(['auth'])
-    ->prefix('admin/categories')
-    ->name('admin.categories.')
-    ->controller(CategoryController::class)
-    ->group(function () {
-        Route::get('/', 'index')
-            ->name('index');
-
-        Route::get('/create', 'create')
-            ->name('create');
-
-        Route::post('/', 'store')
-            ->name('store');
-
-        Route::get('/{id}', 'show')
-            ->name('show');
-
-        Route::get('/{id}/edit', 'edit')
-            ->name('edit');
-
-        Route::put('/{id}', 'update')
-            ->name('update');
-
-        Route::delete('/{id}', 'destroy')
-            ->name('destroy');
-    });
-
-
-Route::middleware(['auth'])
-    ->prefix('admin/products')
-    ->name('admin.products.')
-    ->controller(ProductController::class)
-    ->group(function () {
-        Route::get('/', 'index')
-            ->name('index');
-
-        Route::get('/create', 'create')
-            ->name('create');
-
-        Route::post('/', 'store')
-            ->name('store');
-
-        Route::get('/{id}', 'show')
-            ->name('show');
-
-        Route::get('/{id}/edit', 'edit')
-            ->name('edit');
-
-        Route::put('/{id}', 'update')
-            ->name('update');
-
-        Route::delete('/{id}', 'destroy')
-            ->name('destroy');
-    });
 
 
 
