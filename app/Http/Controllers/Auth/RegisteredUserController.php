@@ -18,7 +18,7 @@ class RegisteredUserController extends Controller
      */
     public function index(): View
     {
-        $users = User::all();
+        $users = User::latest()->paginate(10);
         return view('admin.users.index', compact('users'));
     }
 

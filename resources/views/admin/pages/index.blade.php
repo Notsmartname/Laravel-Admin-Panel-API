@@ -74,6 +74,7 @@
                         @endforelse
                     </tbody>
                 </table>
+                <div class="mt-4">{{ $pages->links() }}</div>
             </div>
         </div>
     </div>
