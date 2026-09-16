@@ -73,22 +73,24 @@
                     {{-- Long Description --}}
                     <div class="mt-4">
                         <x-input-label
-                            for="description"
+                            for="description-editor"
                             :value="__('Long Description')"
                         />
 
-                        <textarea
-                            id="description"
+                        <div id="description-editor" class="mt-1"></div>
+
+                        <input
+                            class="ql-editor"
+                            type="hidden"
                             name="description"
-                            rows="6"
-                            class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                        >{{ old('description', $category->description ?? '') }}</textarea>
+                            id="description"
+                            value="{{ old('description', $category->description ?? '') }}"
+                        >
 
                         <x-input-error
                             :messages="$errors->get('description')"
                             class="mt-2"
                         />
-                    </div>
                     </div>
 
                     <div class="flex items-center justify-between mt-4">
@@ -107,4 +109,7 @@
             </div>
         </div>
     </div>
+    @push('scripts')
+        @vite('resources/js/quill.js')
+    @endpush
 </x-app-layout>
