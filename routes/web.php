@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\ProductController;
 
 Route::get('/', function () {
     return redirect()->route(
@@ -102,6 +103,35 @@ Route::middleware(['auth'])
         Route::delete('/{id}', 'destroy')
             ->name('destroy');
     });
+
+
+Route::middleware(['auth'])
+    ->prefix('admin/products')
+    ->name('admin.products.')
+    ->controller(ProductController::class)
+    ->group(function () {
+        Route::get('/', 'index')
+            ->name('index');
+
+        Route::get('/create', 'create')
+            ->name('create');
+
+        Route::post('/', 'store')
+            ->name('store');
+
+        Route::get('/{id}', 'show')
+            ->name('show');
+
+        Route::get('/{id}/edit', 'edit')
+            ->name('edit');
+
+        Route::put('/{id}', 'update')
+            ->name('update');
+
+        Route::delete('/{id}', 'destroy')
+            ->name('destroy');
+    });
+
 
 
 require __DIR__.'/auth.php';
