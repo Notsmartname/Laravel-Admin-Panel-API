@@ -78,7 +78,7 @@
         </div>
     </div>
 <x-modal name="confirm-category-deletion" focusable>
-    <form method="post" action="{{ route('admin.categories.destroy', $category->id) }}" class="p-6">
+    <form method="post" action="{{ isset($category) ? route('admin.categories.destroy', $category->id) : ''}}" class="p-6">
         @csrf
         @method('delete')
 

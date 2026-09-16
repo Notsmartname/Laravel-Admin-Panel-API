@@ -79,7 +79,7 @@
         </div>
     </div>
 <x-modal name="confirm-page-deletion" focusable>
-        <form method="post" action="{{ route('admin.pages.destroy', $page->id) }}" class="p-6">
+        <form method="post" action="{{ isset($page) ? route('admin.pages.destroy', $page->id) : '' }}" class="p-6">
             @csrf
             @method('delete')
 

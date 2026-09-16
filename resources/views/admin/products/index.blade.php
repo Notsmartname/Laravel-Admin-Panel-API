@@ -78,7 +78,7 @@
         </div>
     </div>
 <x-modal name="confirm-product-deletion" focusable>
-    <form method="post" action="{{ route('admin.products.destroy', $product->id) }}" class="p-6">
+    <form method="post" action="{{ isset($product) ? route('admin.products.destroy', $product->id) : '' }}" class="p-6">
         @csrf
         @method('delete')
 
