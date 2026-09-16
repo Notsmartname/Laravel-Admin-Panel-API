@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
@@ -16,15 +14,24 @@ use Illuminate\View\View;
 class RegisteredUserController extends Controller
 {
     /**
-     * Display the registration view.
+     * Display the users list view.
      */
-    public function create(): View
+    public function index(): View
     {
-        return view('auth.register');
+        $users = User::all();
+        return view('admin.users.index', compact('users'));
     }
 
     /**
-     * Handle an incoming registration request.
+     * Display the user creation view.
+     */
+    public function create(): View
+    {
+        return view('admin.users.create');
+    }
+
+    /**
+     * Handle an incoming user creation request.
      *
      * @throws ValidationException
      */
@@ -32,20 +39,55 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            // 'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'confirmed', Rules\Password::min(5)],
         ]);
 
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'Пользователь создан.');
     }
+
+    /**
+     * Edit the specified user.
+     */
+    public function edit(User $user): View
+    {
+        return view('admin.users.edit', compact('user'));
+    }
+
+    /**
+     * Update the specified user.
+     */
+    public function update(Request $request, User $user): RedirectResponse
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+        ]);
+
+        $user->update([
+            'name' => $request->name,
+        ]);
+
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'Пользователь обновлен.');
+    }
+
+    /**
+     * Remove the specified user.
+     */
+    public function destroy(User $user): RedirectResponse
+    {
+        $user->delete();
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'Пользователь удален.');
+    }
+
 }
