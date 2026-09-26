@@ -21,6 +21,22 @@ class ProfileController extends Controller
         ]);
     }
 
+
+    /**
+     * Update the user's profile information.
+     */
+    public function update(ProfileUpdateRequest $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        $user->update([
+            'name' => $request->validated('name'),
+        ]);
+
+        return Redirect::route('profile.edit')
+            ->with('status', 'profile-updated');
+    }
+
     /**
      * Delete the user's account.
      */
